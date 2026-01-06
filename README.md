@@ -117,7 +117,7 @@ def test_with_assertions(driver):
         print("Element is visible")
 ```
 
-For complete documentation and advanced features, see [PLUGINREADME.md](./PLUGINREADME.md).
+For complete documentation and advanced features, see [This Document](https://github.com/IntelliHeal/intelliheal-plugin/blob/main/README.md).
 
 ## 📋 Prerequisites
 
@@ -240,7 +240,7 @@ Secure authentication system:
 
 ## 📚 Documentation
 
-- **Plugin Implementation**: [PLUGINREADME.md](./PLUGINREADME.md) - Complete guide for implementing IntelliHeal in your tests
+- **Plugin Implementation**: [Docs](https://github.com/IntelliHeal/intelliheal-plugin/blob/main/README.md) - Complete guide for implementing IntelliHeal in your tests
 - **API Documentation**: Access the API docs at `http://localhost:8000/docs` after starting the platform
 - **Database Schema**: [database/schema.sql](./database/schema.sql) - Complete database structure
 
@@ -251,7 +251,7 @@ Secure authentication system:
    pip install IntelliHeal
    ```
 
-2. **Configure Environment Variables** (see [PLUGINREADME.md](./PLUGINREADME.md) for details):
+2. **Configure Environment Variables** (see [This Docs](https://github.com/IntelliHeal/intelliheal-plugin/blob/main/README.md) for details):
    ```bash
    export AI_HEALING_APP_TYPE=WEB  # or MOBILE
    export AI_HEALING_PLATFORM=WEB  # or ANDROID/IOS
@@ -267,7 +267,7 @@ Secure authentication system:
 
 ## 🤝 Support
 
-For issues, questions, or contributions, please refer to the documentation in [PLUGINREADME.md](./PLUGINREADME.md) for detailed implementation guidance.
+For issues, questions, or contributions, please refer to the documentation in [This Document](https://github.com/IntelliHeal/intelliheal-plugin/blob/main/README.md) for detailed implementation guidance.
 
 ---
 
