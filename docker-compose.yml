@@ -1,0 +1,80 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: intelliheal-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-healing_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - healing-network
+
+  backend:
+    image: diditsetiawan23/intelliheal-backend:0.1.0
+    container_name: intelliheal-backend
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-healing_db}
+      CORS_ORIGINS: http://localhost:3001,http://localhost:3000,http://localhost
+      API_PREFIX: /api/v1
+      # JWT Configuration
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-my-secret-key-change-in-production}
+      JWT_ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-1440}
+      # Default Admin User
+      DEFAULT_ADMIN_USERNAME: ${DEFAULT_ADMIN_USERNAME:-admin}
+      DEFAULT_ADMIN_PASSWORD: ${DEFAULT_ADMIN_PASSWORD:-admin123}
+      DEFAULT_ADMIN_EMAIL: ${DEFAULT_ADMIN_EMAIL:-admin@example.com}
+      # Default Regular User
+      DEFAULT_USER_USERNAME: ${DEFAULT_USER_USERNAME:-user}
+      DEFAULT_USER_PASSWORD: ${DEFAULT_USER_PASSWORD:-user123}
+      DEFAULT_USER_EMAIL: ${DEFAULT_USER_EMAIL:-user@example.com}
+    ports:
+      - "8001:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - healing-network
+    restart: unless-stopped
+
+  frontend:
+    image: diditsetiawan23/intelliheal-frontend:0.1.0
+    container_name: intelliheal-frontend
+    environment:
+      VITE_API_BASE_URL: http://localhost:8001/api/v1
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - healing-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  healing-network:
+    driver: bridge
