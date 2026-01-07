@@ -27,7 +27,7 @@ sample-android/
 ## 🚀 Quick Setup
 
 ### 1. Prerequisites
-- Python 3.8+
+- Python 3.10+
 - Appium Server
 - Android SDK/ADB
 - Android Device or Emulator
