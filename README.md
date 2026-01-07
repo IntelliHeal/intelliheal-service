@@ -49,7 +49,7 @@ export PROJECT_NAME="Your Project Name"
 
 **1. Basic Decorator Usage**
 ```python
-from intelliheal_pytest import ai_heal
+from intelliheal import ai_heal
 
 @ai_heal(driver_arg_index=0)
 def click_login_button(driver, login_button_locator):
